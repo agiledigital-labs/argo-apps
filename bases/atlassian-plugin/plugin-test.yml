@@ -19,7 +19,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    createdInBuild: $(commitHash)
     environment: $(environment)
   name: plugin
   labels:
@@ -58,9 +57,9 @@ spec:
           tty: true
           stdin: true
           imagePullPolicy: IfNotPresent
-          envFrom:
-          - configMapRef:
-              name: config
+          env:
+          - name: COMMIT_HASH
+            value: $(commitHash)
           command:
             - /bin/bash
             - -c

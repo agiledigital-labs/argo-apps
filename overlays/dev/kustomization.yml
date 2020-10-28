@@ -5,7 +5,7 @@ generatorOptions:
 # namePrefix: ideaSearch-
 commonLabels:
   environment: develop
-  commitHash: a33eac0fc96122e6b90fc1816ec2e44c68451d5d
+  commitHash: e0dc7c708742ac5fc59dd092e66af3e58db6bd90
 configurations:
   - ./configuration/varReference.yml
 configMapGenerator:
