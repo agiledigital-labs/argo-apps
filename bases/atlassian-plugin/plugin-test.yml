@@ -58,6 +58,9 @@ spec:
           tty: true
           stdin: true
           imagePullPolicy: IfNotPresent
+          envFrom:
+          - configMapRef:
+              name: config
           command:
             - /bin/bash
             - -c

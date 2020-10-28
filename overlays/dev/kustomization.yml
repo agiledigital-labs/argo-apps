@@ -1,51 +1,42 @@
----
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 generatorOptions:
   disableNameSuffixHash: true
-
 # namePrefix: ideaSearch-
-
 commonLabels:
   environment: develop
-  commitHash: "1234"
-
+  commitHash: a33eac0fc96122e6b90fc1816ec2e44c68451d5d
 configurations:
-- ./configuration/varReference.yml
-
+  - ./configuration/varReference.yml
 configMapGenerator:
-- name: config
-  literals:
-  - PLUGIN_NAME=ideaSearch
-  - ENVIRONMENT=$(environment)
-  - COMMIT_HASH=$(commitHash)
-
+  - name: config
+    literals:
+      - PLUGIN_NAME=ideaSearch
+      - ENVIRONMENT=$(environment)
+      - COMMIT_HASH=$(commitHash)
 bases:
   - ../../bases/atlassian-plugin
   - ../../bases/config
-
-
 # The variables defined below can be referenced in resources using the syntax $(VARIABLE)
 vars:
-- name: environment
-  fieldref:
-    fieldpath: metadata.labels.environment
-  objref:
-    apiVersion: v1
-    kind: ConfigMap
-    name: config
-- name: commitHash
-  fieldref:
-    fieldpath: metadata.labels.commitHash
-  objref:
-    apiVersion: v1
-    kind: ConfigMap
-    name: config
-- name: pluginName
-  fieldref:
-    fieldpath: data.PLUGIN_NAME
-  objref:
-    apiVersion: v1
-    kind: ConfigMap
-    name: config
+  - name: environment
+    fieldref:
+      fieldpath: metadata.labels.environment
+    objref:
+      apiVersion: v1
+      kind: ConfigMap
+      name: config
+  - name: commitHash
+    fieldref:
+      fieldpath: metadata.labels.commitHash
+    objref:
+      apiVersion: v1
+      kind: ConfigMap
+      name: config
+  - name: pluginName
+    fieldref:
+      fieldpath: data.PLUGIN_NAME
+    objref:
+      apiVersion: v1
+      kind: ConfigMap
+      name: config
