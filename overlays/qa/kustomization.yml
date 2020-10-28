@@ -9,7 +9,6 @@ generatorOptions:
 
 commonLabels:
   environment: qa
-  commitHash: "1234"
 
 configurations:
 - ./configuration/varReference.yml
@@ -19,7 +18,7 @@ configMapGenerator:
   literals:
   - PLUGIN_NAME=ideaSearch
   - ENVIRONMENT=$(environment)
-  - COMMIT_HASH=$(commitHash)
+  - COMMIT_HASH=4e786d1e8cf536aa085520e4f8976d614fcb3b80
 
 bases:
   - ../../bases/atlassian-plugin
@@ -37,7 +36,7 @@ vars:
     name: config
 - name: commitHash
   fieldref:
-    fieldpath: metadata.labels.commitHash
+    fieldpath: data.COMMIT_HASH
   objref:
     apiVersion: v1
     kind: ConfigMap
