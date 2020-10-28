@@ -1,8 +1,12 @@
 ---
 varReference:
+- path: metadata/labels
+  kind: Deployment
 - path: spec/selector/matchLabels/app
   kind: Deployment
 - path: spec/template/metadata/labels/app
+  kind: Deployment
+- path: spec/template/metadata/labels/environment
   kind: Deployment
 - path: spec/template/spec/containers/name
   kind: Deployment
@@ -11,6 +15,8 @@ varReference:
 - path: spec/ports/nodePort
   kind: Service
 - path: spec/selector/app
+  kind: Service
+- path: spec/selector/environment
   kind: Service
 
 
