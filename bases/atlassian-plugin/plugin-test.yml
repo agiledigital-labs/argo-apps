@@ -23,6 +23,7 @@ metadata:
   name: plugin
   labels:
     app: "$(pluginName)-plugin"
+    commitHash: "test"
 spec:
   replicas: 1
   progressDeadlineSeconds: 300

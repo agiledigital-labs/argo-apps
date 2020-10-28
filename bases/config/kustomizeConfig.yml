@@ -2,5 +2,3 @@
 varReference:
 - path: data
   kind: ConfigMap
-- path: metadata/name
-  kind: Namespace

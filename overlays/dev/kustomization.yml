@@ -2,18 +2,15 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 generatorOptions:
   disableNameSuffixHash: true
-# namePrefix: ideaSearch-
-commonLabels:
-  environment: develop
-  commitHash: e0dc7c708742ac5fc59dd092e66af3e58db6bd90
+
 configurations:
   - ./configuration/varReference.yml
 configMapGenerator:
   - name: config
     literals:
       - PLUGIN_NAME=ideaSearch
-      - ENVIRONMENT=$(environment)
-      - COMMIT_HASH=$(commitHash)
+      - ENVIRONMENT=develop
+      - COMMIT_HASH=4e786d1e8cf536aa085520e4f8976d614fcb3b80
 bases:
   - ../../bases/atlassian-plugin
   - ../../bases/config
@@ -21,14 +18,14 @@ bases:
 vars:
   - name: environment
     fieldref:
-      fieldpath: metadata.labels.environment
+      fieldpath: data.ENVIRONMENT
     objref:
       apiVersion: v1
       kind: ConfigMap
       name: config
   - name: commitHash
     fieldref:
-      fieldpath: metadata.labels.commitHash
+      fieldpath: data.COMMIT_HASH
     objref:
       apiVersion: v1
       kind: ConfigMap
