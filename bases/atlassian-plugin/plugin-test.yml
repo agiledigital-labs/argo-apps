@@ -80,7 +80,8 @@ spec:
 
               atlas-version
 
-
+              atlas-mvn package
+              
               atlas-run --context-path ROOT
 
 
