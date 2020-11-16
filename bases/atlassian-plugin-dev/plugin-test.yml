@@ -14,6 +14,7 @@ spec:
       port: 1990
       targetPort: http
       protocol: TCP
+      nodePort: 30556
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -58,6 +59,15 @@ spec:
           tty: true
           stdin: true
           imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command: 
+                - /bin/bash
+                - -c
+                - |
+                  curl -X POST --user admin:admin --header "X-Atlassian-Token: no-check" http://localhost:34883/confluence/rest/synchrony-interop/disable
+            initialDelaySeconds: 50
+            periodSeconds: 50
           env:
           - name: COMMIT_HASH
             value: $(commitHash)
@@ -81,12 +91,12 @@ spec:
               atlas-version
 
 
-              atlas-run --context-path ROOT
+              atlas-run --server "http://192.168.10.190" --http-port "30556"
 
 
               
           ports:
-            - containerPort: 1990
+            - containerPort: 30556
               name: http
             - containerPort: 34883
               name: rmi

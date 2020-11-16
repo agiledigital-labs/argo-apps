@@ -11,7 +11,7 @@ configMapGenerator:
       - ENVIRONMENT=develop
       - COMMIT_HASH=4e786d1e8cf536aa085520e4f8976d614fcb3b80
 bases:
-  - ../../bases/atlassian-plugin
+  - ../../bases/atlassian-plugin-dev
   - ../../bases/config
 # The variables defined below can be referenced in resources using the syntax $(VARIABLE)
 vars:

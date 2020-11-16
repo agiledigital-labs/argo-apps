@@ -1,0 +1,5 @@
+---
+
+resources:
+  - atlassian-sdk-volume.yml
+  - plugin-test.yml

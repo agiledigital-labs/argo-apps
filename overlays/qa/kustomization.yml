@@ -17,7 +17,7 @@ configMapGenerator:
   - COMMIT_HASH=4e786d1e8cf536aa085520e4f8976d614fcb3b80
 
 bases:
-  - ../../bases/atlassian-plugin
+  - ../../bases/atlassian-plugin-qa
   - ../../bases/config
 
 

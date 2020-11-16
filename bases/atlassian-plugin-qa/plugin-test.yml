@@ -1,0 +1,123 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: plugin
+  labels:
+    app: plugin
+spec:
+  selector:
+    app: "$(pluginName)-plugin"
+    environment: $(environment)
+  type: NodePort
+  ports:
+    - name: http
+      port: 1990
+      targetPort: http
+      protocol: TCP
+      nodePort: 31567
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    environment: $(environment)
+  name: plugin
+  labels:
+    app: "$(pluginName)-plugin"
+    commitHash: "test"
+spec:
+  replicas: 1
+  progressDeadlineSeconds: 300
+  selector:
+    matchLabels:
+      app: "$(pluginName)-plugin"
+  template:
+    metadata:
+      labels:
+        app: "$(pluginName)-plugin"
+        environment: $(environment)
+    spec:
+      initContainers:
+        - image: alpine/git
+          name: git
+          imagePullPolicy: IfNotPresent
+          args:
+            - clone
+            - --branch 
+            - $(environment)
+            - https://github.com/agiledigital-labs/confluence-plugin-idea-search.git
+            - /home/runner/artifacts
+
+
+          volumeMounts:
+            - name: artifacts
+              mountPath: /home/runner/artifacts
+
+      containers:
+        - image: maven:3-openjdk-8
+          name: "plugin"
+          tty: true
+          stdin: true
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command: 
+                - /bin/bash
+                - -c
+                - |
+                  curl -X POST --user admin:admin --header "X-Atlassian-Token: no-check" http://localhost:34883/confluence.url/rest/synchrony-interop/disable
+            initialDelaySeconds: 50
+            periodSeconds: 50
+          env:
+          - name: COMMIT_HASH
+            value: $(commitHash)
+          command:
+            - /bin/bash
+            - -c
+            - |
+              #!/bin/bash
+
+              if [ ! -d "/opt/atlassian-plugin-sdk/bin" ]; then
+                echo "You need to add the atlassian sdk to the PV"
+                echo "Use kubectl cp atlassian-plugin-sdk plugin-hash:/opt/"
+                sleep 180
+              fi
+
+
+              export PATH=$PATH:/opt/atlassian-plugin-sdk/bin
+
+              cd /home/runner/artifacts
+
+              atlas-version
+
+
+              atlas-run --server "http://192.168.10.190" --http-port "31567"
+
+
+              
+          ports:
+            - containerPort: 31567
+              name: http
+            - containerPort: 34883
+              name: rmi
+            - containerPort: 8009
+              name: ajp
+            - containerPort: 5990
+              name: test
+          volumeMounts:
+          - mountPath: /opt/atlassian-plugin-sdk
+            name: atlassian-plugin-sdk
+          - mountPath: /root/.m2
+            name: maven-cache-volume
+          - name: artifacts
+            mountPath: /home/runner/artifacts
+      volumes:
+        - name: atlassian-plugin-sdk
+          persistentVolumeClaim:
+            claimName: atlassian-sdk-volume
+        - name: maven-cache-volume
+          persistentVolumeClaim:
+            claimName: maven-cache-volume
+        - name: artifacts
+          emptyDir: {}
+
