@@ -9,7 +9,7 @@ configMapGenerator:
     literals:
       - PLUGIN_NAME=ideaSearch
       - ENVIRONMENT=develop
-      - COMMIT_HASH=aabe1f726501ff9fb33f5d98d2b2b1c2403f23ad
+      - COMMIT_HASH=917a07f690a11b49451b158de7db5f862b65b4be
 bases:
   - ../../bases/atlassian-plugin-dev
   - ../../bases/config
