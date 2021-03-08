@@ -52,6 +52,22 @@ spec:
           volumeMounts:
             - name: artifacts
               mountPath: /home/runner/artifacts
+        - image: node:12
+          name: node
+          imagePullPolicy: IfNotPresent
+                    command:
+            - /bin/bash
+            - -c
+            - |
+              #!/bin/bash
+              cd /home/runner/artifacts/frontend-react
+              yarn install
+              yarn build
+
+
+          volumeMounts:
+            - name: artifacts
+              mountPath: /home/runner/artifacts
 
       containers:
         - image: maven:3-openjdk-8
@@ -85,8 +101,9 @@ spec:
 
 
               export PATH=$PATH:/opt/atlassian-plugin-sdk/bin
+              
 
-              cd /home/runner/artifacts
+              cd /home/runner/artifacts/backend
 
               atlas-version
 
