@@ -47,15 +47,13 @@ spec:
             - $(environment)
             - https://github.com/agiledigital-labs/confluence-plugin-idea-search.git
             - /home/runner/artifacts
-
-
           volumeMounts:
             - name: artifacts
               mountPath: /home/runner/artifacts
         - image: node:12
           name: node
           imagePullPolicy: IfNotPresent
-            command:
+          command:
             - /bin/bash
             - -c
             - |
